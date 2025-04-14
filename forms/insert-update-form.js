@@ -45,6 +45,11 @@ document.addEventListener("DOMContentLoaded", function () {
         notificationSectionCode: parseInt(opt.value)
       }))
     };
+
+    const wrappedData = {
+      notificationAccount: [data]
+    };
+
     console.log(data)
 
     // Send data to API
@@ -54,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(wrappedData)
     })
       .then(response => {
         if (!response.ok) {
