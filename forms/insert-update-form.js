@@ -3,16 +3,24 @@ document.addEventListener("DOMContentLoaded", function () {
   const token = "bluebird";
 
 
-  // Populate Performing Site with values 1 to 61
+  // Replace this with the actual list from your database
+  const eostPerformingSites = [
+    "PHP", "QTE", "CHL", "SLI", "AMD", "ESW", "SJC", "FDX", "Z3E", "ZBD",
+    "WDL", "MJV", "STL", "NEL", "PBL", "QER", "ERE", "SKB", "TMP", "**", 
+    "QSO", "DLO", "DAL", "MET", "SEA", "EXO", "AAR", "AGI", "ACF", "***", 
+    "ACV", "DCF", "AIN", "ALU", "NGI", "AOK", "DPP", "SWF", "ATA", "ANT",
+    "DAZ", "DBA", "DPC", "DDR", "DSF", "DWI", "TP1"
+  ];
+
   const performingSiteSelect = document.getElementById("performingSite");
   if (performingSiteSelect) {
     performingSiteSelect.innerHTML = '<option value="">Select Code</option>';
-    for (let i = 1; i <= 61; i++) {
+    eostPerformingSites.forEach(code => {
       const option = document.createElement("option");
-      option.value = i;
-      option.textContent = i;
+      option.value = code;
+      option.textContent = code;
       performingSiteSelect.appendChild(option);
-    }
+    });
   }
 
   // Handle form submission
