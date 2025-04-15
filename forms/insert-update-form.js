@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
       clientAccountNumber: document.getElementById("clientAccount").value,
       performingSite: document.getElementById("performingSite").value,
       comment: document.getElementById("comment").value,
-      destinationCode: document.getElementById("destinationCode").value,
+      destinationCode: parseInt(document.getElementById("destinationCode").value),
       requestedBy: document.getElementById("requestedBy").value,
       messageVersion: document.getElementById("messageVersion").value,
       suppressManualOrder: form.querySelector('input[name="suppressManualOrder"]:checked').value,
