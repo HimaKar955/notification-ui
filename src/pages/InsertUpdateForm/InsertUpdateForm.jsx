@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const InsertUpdateForm = () => {
-  const token = 'bluebird';
+  const token = "bluebird";
 
   // State to manage form data
   const [formData, setFormData] = useState({
-    clientAccountNumber: '',
-    performingSite: '',
-    comment: '',
-    destinationCode: '',
-    requestedBy: 'John Doe',
-    messageVersion: 'v1',
-    suppressManualOrder: 'false',
-    suppressReflexTests: 'false',
+    clientAccountNumber: "",
+    performingSite: "",
+    comment: "",
+    destinationCode: "",
+    requestedBy: "John Doe",
+    messageVersion: "1",
+    suppressManualOrder: "false",
+    suppressReflexTests: "false",
     notificationAccountStatusCode: [],
     notificationContent: [],
   });
@@ -24,11 +24,53 @@ const InsertUpdateForm = () => {
   useEffect(() => {
     // List of performing sites (simulating fetching from a database)
     setPerformingSites([
-      'PHP', 'QTE', 'CHL', 'SLI', 'AMD', 'ESW', 'SJC', 'FDX', 'Z3E', 'ZBD',
-      'WDL', 'MJV', 'STL', 'NEL', 'PBL', 'QER', 'ERE', 'SKB', 'TMP', '**',
-      'QSO', 'DLO', 'DAL', 'MET', 'SEA', 'EXO', 'AAR', 'AGI', 'ACF', '***',
-      'ACV', 'DCF', 'AIN', 'ALU', 'NGI', 'AOK', 'DPP', 'SWF', 'ATA', 'ANT',
-      'DAZ', 'DBA', 'DPC', 'DDR', 'DSF', 'DWI', 'TP1',
+      "PHP",
+      "QTE",
+      "CHL",
+      "SLI",
+      "AMD",
+      "ESW",
+      "SJC",
+      "FDX",
+      "Z3E",
+      "ZBD",
+      "WDL",
+      "MJV",
+      "STL",
+      "NEL",
+      "PBL",
+      "QER",
+      "ERE",
+      "SKB",
+      "TMP",
+      "",
+      "QSO",
+      "DLO",
+      "DAL",
+      "MET",
+      "SEA",
+      "EXO",
+      "AAR",
+      "AGI",
+      "ACF",
+      "*",
+      "ACV",
+      "DCF",
+      "AIN",
+      "ALU",
+      "NGI",
+      "AOK",
+      "DPP",
+      "SWF",
+      "ATA",
+      "ANT",
+      "DAZ",
+      "DBA",
+      "DPC",
+      "DDR",
+      "DSF",
+      "DWI",
+      "TP1",
     ]);
   }, []);
 
@@ -42,14 +84,18 @@ const InsertUpdateForm = () => {
   };
 
   // Handle multi-select changes
-  const handleMultiSelectChange = (e) => {
-    const { name, options } = e.target;
-    const selectedOptions = Array.from(options)
-      .filter((option) => option.selected)
-      .map((option) => parseInt(option.value));
+  const handleMultiSelectChange = (e, keyName) => {
+    const selectedOptions = Array.from(e.target.selectedOptions).map((opt) =>
+      parseInt(opt.value)
+    );
+
+    const mapped = selectedOptions.map((val) => ({
+      [keyName]: val,
+    }));
+
     setFormData((prevState) => ({
       ...prevState,
-      [name]: selectedOptions,
+      [e.target.name]: mapped,
     }));
   };
 
@@ -58,25 +104,28 @@ const InsertUpdateForm = () => {
     e.preventDefault();
 
     // Prepare the form data to be sent in the API request
-    const wrappedData = {
+    const notificationConfigPayload = {
       notificationAccount: [formData],
     };
 
+    console.log(notificationConfigPayload, "notificationConfigPayload");
+
     try {
       const response = await axios.post(
-        'https://eost-qa.dev.az.qdx.com/eost-notification/notifConfig',
-        wrappedData,
+        `https://eost-qa.dev.az.qdx.com/eost-notification/notifConfig`,
+        notificationConfigPayload,
         {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
+            Orgin: 'test',
           },
         }
       );
       setResponseData(response.data);
     } catch (error) {
-      console.error('Error submitting form:', error);
-      setResponseData({ error: 'Failed to submit notification.' });
+      console.error("Error submitting form:", error);
+      setResponseData({ error: "Failed to submit notification." });
     }
   };
 
@@ -165,7 +214,7 @@ const InsertUpdateForm = () => {
               id="requestedBy"
               name="requestedBy"
               value={formData.requestedBy}
-              disabled
+              onChange={handleChange}
             />
           </div>
 
@@ -180,8 +229,8 @@ const InsertUpdateForm = () => {
               value={formData.messageVersion}
               onChange={handleChange}
             >
-              <option value="v1">v1</option>
-              <option value="v2">v2</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
             </select>
           </div>
 
@@ -194,7 +243,7 @@ const InsertUpdateForm = () => {
                 name="suppressManualOrder"
                 id="suppressYes"
                 value="true"
-                checked={formData.suppressManualOrder === 'true'}
+                checked={formData.suppressManualOrder === "true"}
                 onChange={handleChange}
               />
               <label className="form-check-label" htmlFor="suppressYes">
@@ -208,7 +257,7 @@ const InsertUpdateForm = () => {
                 name="suppressManualOrder"
                 id="suppressNo"
                 value="false"
-                checked={formData.suppressManualOrder === 'false'}
+                checked={formData.suppressManualOrder === "false"}
                 onChange={handleChange}
               />
               <label className="form-check-label" htmlFor="suppressNo">
@@ -226,7 +275,7 @@ const InsertUpdateForm = () => {
                 name="suppressReflexTests"
                 id="reflexYes"
                 value="true"
-                checked={formData.suppressReflexTests === 'true'}
+                checked={formData.suppressReflexTests === "true"}
                 onChange={handleChange}
               />
               <label className="form-check-label" htmlFor="reflexYes">
@@ -240,7 +289,7 @@ const InsertUpdateForm = () => {
                 name="suppressReflexTests"
                 id="reflexNo"
                 value="false"
-                checked={formData.suppressReflexTests === 'false'}
+                checked={formData.suppressReflexTests === "false"}
                 onChange={handleChange}
               />
               <label className="form-check-label" htmlFor="reflexNo">
@@ -258,16 +307,18 @@ const InsertUpdateForm = () => {
               className="form-select"
               id="notificationStatusCode"
               name="notificationAccountStatusCode"
-              value={formData.notificationAccountStatusCode}
-              onChange={handleMultiSelectChange}
+              value={formData.notificationAccountStatusCode.map(
+                (item) => item.notificationAccountStatusCode
+              )}
+              onChange={(e) =>
+                handleMultiSelectChange(e, "notificationAccountStatusCode")
+              }
             >
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
+              {[1, 2, 3, 4, 5, 6, 7].map((num) => (
+                <option key={num} value={num}>
+                  {num}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -280,16 +331,24 @@ const InsertUpdateForm = () => {
               className="form-select"
               id="notificationContent"
               name="notificationContent"
-              value={formData.notificationContent}
-              onChange={handleMultiSelectChange}
+              value={formData.notificationContent.map(
+                (item) => item.notificationContent
+              )}
+              onChange={(e) =>
+                handleMultiSelectChange(e, "notificationContent")
+              }
             >
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
+              {[1, 2, 3].map((num) => (
+                <option key={num} value={num}>
+                  {num}
+                </option>
+              ))}
             </select>
           </div>
 
-          <button type="submit" className="btn btn-success">Submit</button>
+          <button type="submit" className="btn btn-success">
+            Submit
+          </button>
         </form>
       </div>
 
@@ -297,7 +356,7 @@ const InsertUpdateForm = () => {
       {responseData && (
         <div className="card p-4 shadow-sm mt-4">
           <h5>API Response</h5>
-          <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
+          <pre style={{ whiteSpace: "pre-wrap", wordWrap: "break-word" }}>
             {JSON.stringify(responseData, null, 2)}
           </pre>
         </div>
