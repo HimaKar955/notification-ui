@@ -311,7 +311,7 @@ const InsertUpdateForm = () => {
                 (item) => item.notificationAccountStatusCode
               )}
               onChange={(e) =>
-                handleMultiSelectChange(e, "notificationAccountStatusCode")
+                handleMultiSelectChange(e, "requisitionStatusCode")
               }
             >
               {[1, 2, 3, 4, 5, 6, 7].map((num) => (
@@ -335,7 +335,7 @@ const InsertUpdateForm = () => {
                 (item) => item.notificationContent
               )}
               onChange={(e) =>
-                handleMultiSelectChange(e, "notificationContent")
+                handleMultiSelectChange(e, "notificationSectionCode")
               }
             >
               {[1, 2, 3].map((num) => (
