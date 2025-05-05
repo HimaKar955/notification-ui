@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import NotificationTable from '../../components/NotificationTable/NotificationTable';
 
 const ReadNotificationForm = () => {
   const [formData, setFormData] = useState({
@@ -99,6 +100,10 @@ const ReadNotificationForm = () => {
           </pre>
         </div>
       )}
+      <div className='mt-5'>
+
+      <NotificationTable />
+      </div>
     </div>
   );
 };

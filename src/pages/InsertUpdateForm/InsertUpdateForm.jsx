@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { useLocation } from "react-router-dom";
+import {createOrUpdateNotification} from '../../api/Notification/notificationApi'
 
 const InsertUpdateForm = () => {
   const token = "bluebird";
 
   // State to manage form data
-  const [formData, setFormData] = useState({
-    clientAccountNumber: "",
-    performingSite: "",
-    comment: "",
-    destinationCode: "",
-    requestedBy: "John Doe",
-    messageVersion: "1",
-    suppressManualOrder: "false",
-    suppressReflexTests: "false",
-    notificationAccountStatusCode: [],
-    notificationContent: [],
-  });
+  const location = useLocation();
+  const { rowData, isEditForm } = location.state || {}; // Accessing the passed row data
+
+  const [formData, setFormData] = useState(
+    rowData || {
+      clientAccountNumber: "",
+      performingSite: "",
+      comment: "",
+      destinationCode: "",
+      requestedBy: "John Doe",
+      messageVersion: "1",
+      suppressManualOrder: "false",  // default value "false"
+      suppressReflexTests: "false",  // default value "false"
+      notificationAccountStatusCode: [],
+      notificationContent: [],
+    }
+  );
 
   const [performingSites, setPerformingSites] = useState([]);
   const [responseData, setResponseData] = useState(null);
@@ -24,53 +30,11 @@ const InsertUpdateForm = () => {
   useEffect(() => {
     // List of performing sites (simulating fetching from a database)
     setPerformingSites([
-      "PHP",
-      "QTE",
-      "CHL",
-      "SLI",
-      "AMD",
-      "ESW",
-      "SJC",
-      "FDX",
-      "Z3E",
-      "ZBD",
-      "WDL",
-      "MJV",
-      "STL",
-      "NEL",
-      "PBL",
-      "QER",
-      "ERE",
-      "SKB",
-      "TMP",
-      "",
-      "QSO",
-      "DLO",
-      "DAL",
-      "MET",
-      "SEA",
-      "EXO",
-      "AAR",
-      "AGI",
-      "ACF",
-      "*",
-      "ACV",
-      "DCF",
-      "AIN",
-      "ALU",
-      "NGI",
-      "AOK",
-      "DPP",
-      "SWF",
-      "ATA",
-      "ANT",
-      "DAZ",
-      "DBA",
-      "DPC",
-      "DDR",
-      "DSF",
-      "DWI",
-      "TP1",
+      "PHP", "QTE", "CHL", "SLI", "AMD", "ESW", "SJC", "FDX", "Z3E", "ZBD",
+      "WDL", "MJV", "STL", "NEL", "PBL", "QER", "ERE", "SKB", "TMP", "**",
+      "QSO", "DLO", "DAL", "MET", "SEA", "EXO", "AAR", "AGI", "ACF", "***",
+      "ACV", "DCF", "AIN", "ALU", "NGI", "AOK", "DPP", "SWF", "ATA", "ANT",
+      "DAZ", "DBA", "DPC", "DDR", "DSF", "DWI", "TP1",
     ]);
   }, []);
 
@@ -82,58 +46,48 @@ const InsertUpdateForm = () => {
       [name]: value,
     }));
   };
-
   // Handle multi-select changes
   const handleMultiSelectChange = (e, keyName) => {
-    const selectedOptions = Array.from(e.target.selectedOptions).map((opt) =>
-      parseInt(opt.value)
+    const selectedOptions = Array.from(e.target.selectedOptions).map(
+      (opt) => ({ [keyName]: parseInt(opt.value) })
     );
-
-    const mapped = selectedOptions.map((val) => ({
-      [keyName]: val,
-    }));
 
     setFormData((prevState) => ({
       ...prevState,
-      [e.target.name]: mapped,
+      [e.target.name]: selectedOptions,
     }));
   };
 
-  // Handle form submission
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Prepare the form data to be sent in the API request
+  
+    const payloadData = { ...formData };
+    if (isEditForm) {
+      delete payloadData.clientAccountNumber;
+    }
+  
     const notificationConfigPayload = {
-      notificationAccount: [formData],
+      notificationAccount: [payloadData],
     };
-
-    console.log(notificationConfigPayload, "notificationConfigPayload");
-
+  
+  
     try {
-      const response = await axios.post(
-        `https://eost-qa.dev.az.qdx.com/eost-notification/notifConfig`,
-        notificationConfigPayload,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-            Orgin: 'test',
-          },
-        }
-      );
+      const response = await createOrUpdateNotification(notificationConfigPayload, token);
       setResponseData(response.data);
     } catch (error) {
       console.error("Error submitting form:", error);
       setResponseData({ error: "Failed to submit notification." });
     }
   };
+  
 
   return (
     <div>
       <h4>Insert/Update Notification</h4>
       <div className="card p-4 shadow-sm">
         <form id="notificationForm" onSubmit={handleSubmit}>
+          {/* Client Account Number */}
           <div className="mb-3">
             <label htmlFor="clientAccount" className="form-label">
               Client Account Number *
@@ -149,6 +103,7 @@ const InsertUpdateForm = () => {
             />
           </div>
 
+          {/* Performing Site */}
           <div className="mb-3">
             <label htmlFor="performingSite" className="form-label">
               Performing Site *
@@ -170,6 +125,7 @@ const InsertUpdateForm = () => {
             </select>
           </div>
 
+          {/* Comment */}
           <div className="mb-3">
             <label htmlFor="comment" className="form-label">
               Comment
@@ -184,6 +140,7 @@ const InsertUpdateForm = () => {
             />
           </div>
 
+          {/* Destination Code */}
           <div className="mb-3">
             <label htmlFor="destinationCode" className="form-label">
               Destination Code *
@@ -204,6 +161,7 @@ const InsertUpdateForm = () => {
             </select>
           </div>
 
+          {/* Requested By */}
           <div className="mb-3">
             <label htmlFor="requestedBy" className="form-label">
               Requested By
@@ -218,6 +176,7 @@ const InsertUpdateForm = () => {
             />
           </div>
 
+          {/* Message Version */}
           <div className="mb-3">
             <label htmlFor="messageVersion" className="form-label">
               Message Version
@@ -234,6 +193,7 @@ const InsertUpdateForm = () => {
             </select>
           </div>
 
+          {/* Suppress Manual Order */}
           <div className="mb-3">
             <label className="form-label d-block">Suppress Manual Order</label>
             <div className="form-check form-check-inline">
@@ -242,8 +202,8 @@ const InsertUpdateForm = () => {
                 type="radio"
                 name="suppressManualOrder"
                 id="suppressYes"
-                value="true"
-                checked={formData.suppressManualOrder === "true"}
+                value="Y"
+                checked={formData.supressManualOrder === "Y"}
                 onChange={handleChange}
               />
               <label className="form-check-label" htmlFor="suppressYes">
@@ -256,8 +216,8 @@ const InsertUpdateForm = () => {
                 type="radio"
                 name="suppressManualOrder"
                 id="suppressNo"
-                value="false"
-                checked={formData.suppressManualOrder === "false"}
+                value="N"
+                checked={formData.supressManualOrder === "N"}
                 onChange={handleChange}
               />
               <label className="form-check-label" htmlFor="suppressNo">
@@ -266,6 +226,7 @@ const InsertUpdateForm = () => {
             </div>
           </div>
 
+          {/* Suppress Reflex Tests */}
           <div className="mb-3">
             <label className="form-label d-block">Suppress Reflex Tests</label>
             <div className="form-check form-check-inline">
@@ -274,8 +235,8 @@ const InsertUpdateForm = () => {
                 type="radio"
                 name="suppressReflexTests"
                 id="reflexYes"
-                value="true"
-                checked={formData.suppressReflexTests === "true"}
+                value="Y"
+                checked={formData.supressReflexTests === "Y"}
                 onChange={handleChange}
               />
               <label className="form-check-label" htmlFor="reflexYes">
@@ -288,8 +249,8 @@ const InsertUpdateForm = () => {
                 type="radio"
                 name="suppressReflexTests"
                 id="reflexNo"
-                value="false"
-                checked={formData.suppressReflexTests === "false"}
+                value="N"
+                checked={formData.supressReflexTests === "N"}
                 onChange={handleChange}
               />
               <label className="form-check-label" htmlFor="reflexNo">
@@ -298,6 +259,7 @@ const InsertUpdateForm = () => {
             </div>
           </div>
 
+          {/* Notification Account Status Code (Multi Select) */}
           <div className="mb-3">
             <label htmlFor="notificationStatusCode" className="form-label">
               Notification Account Status Code
@@ -308,7 +270,7 @@ const InsertUpdateForm = () => {
               id="notificationStatusCode"
               name="notificationAccountStatusCode"
               value={formData.notificationAccountStatusCode.map(
-                (item) => item.notificationAccountStatusCode
+                (item) => item.requisitionStatusCode
               )}
               onChange={(e) =>
                 handleMultiSelectChange(e, "requisitionStatusCode")
@@ -322,6 +284,7 @@ const InsertUpdateForm = () => {
             </select>
           </div>
 
+          {/* Notification Content (Multi Select) */}
           <div className="mb-3">
             <label htmlFor="notificationContent" className="form-label">
               Notification Content
@@ -332,7 +295,7 @@ const InsertUpdateForm = () => {
               id="notificationContent"
               name="notificationContent"
               value={formData.notificationContent.map(
-                (item) => item.notificationContent
+                (item) => item.notificationSectionCode
               )}
               onChange={(e) =>
                 handleMultiSelectChange(e, "notificationSectionCode")
@@ -346,8 +309,9 @@ const InsertUpdateForm = () => {
             </select>
           </div>
 
+          {/* Submit Button */}
           <button type="submit" className="btn btn-success">
-            Submit
+            {isEditForm ? "Update" : "Submit"}
           </button>
         </form>
       </div>
