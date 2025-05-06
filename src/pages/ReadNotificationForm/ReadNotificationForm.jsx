@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import NotificationTable from '../../components/NotificationTable/NotificationTable';
 
@@ -7,8 +7,20 @@ const ReadNotificationForm = () => {
     clientAccountNumber: '',
     performingSite: '',
   });
+  const [performingSites, setPerformingSites] = useState([]);
   const [responseData, setResponseData] = useState(null);
   const token = 'bluebird';
+
+  useEffect(() => {
+      // List of performing sites (simulating fetching from a database)
+      setPerformingSites([
+        "PHP", "QTE", "CHL", "SLI", "AMD", "ESW", "SJC", "FDX", "Z3E", "ZBD",
+        "WDL", "MJV", "STL", "NEL", "PBL", "QER", "ERE", "SKB", "TMP", "**",
+        "QSO", "DLO", "DAL", "MET", "SEA", "EXO", "AAR", "AGI", "ACF", "***",
+        "ACV", "DCF", "AIN", "ALU", "NGI", "AOK", "DPP", "SWF", "ATA", "ANT",
+        "DAZ", "DBA", "DPC", "DDR", "DSF", "DWI", "TP1",
+      ]);
+    }, []);
 
   // Handle input changes
   const handleChange = (e) => {
@@ -67,21 +79,25 @@ const ReadNotificationForm = () => {
             />
           </div>
 
+          {/* Performing Site */}
           <div className="mb-3">
-            <label htmlFor="performingSiteRead" className="form-label">
+            <label htmlFor="performingSite" className="form-label">
               Performing Site *
             </label>
             <select
               className="form-select"
-              id="performingSiteRead"
+              id="performingSite"
               name="performingSite"
               value={formData.performingSite}
               onChange={handleChange}
               required
             >
-              <option value="">Select Site</option>
-              <option value="Site A">Site A</option>
-              <option value="Site B">Site B</option>
+              <option value="">Select Code</option>
+              {performingSites.map((code) => (
+                <option key={code} value={code}>
+                  {code}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -95,15 +111,11 @@ const ReadNotificationForm = () => {
       {responseData && (
         <div className="card p-4 shadow-sm mt-4">
           <h5>API Response</h5>
-          <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
-            {JSON.stringify(responseData, null, 2)}
-          </pre>
+          <div className='mt-5'>
+            <NotificationTable responseData={responseData} />
+          </div>
         </div>
       )}
-      <div className='mt-5'>
-
-      <NotificationTable />
-      </div>
     </div>
   );
 };
