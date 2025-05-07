@@ -1,7 +1,7 @@
 // src/api/notificationApi.js
 import axios from "axios";
 
-const BASE_URL = "https://eost.dev.az.qdx.com/eost-notification";
+const BASE_URL = "https://eost-qa.dev.az.qdx.com/eost-notification";
 
 // GET: Notification config list
 export const getNotificationConfig = async ({
