@@ -36,6 +36,7 @@ export const deleteNotificationConfig = async (
   return axios.delete(url, {
     headers: {
       Authorization: `Bearer ${token}`,
+      origin: 'http://localhost:5173',
     },
   });
 };
@@ -49,7 +50,7 @@ export const createOrUpdateNotification = async (
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
-      Origin: "test",
+      origin: 'http://localhost:5173',
     },
   });
 };

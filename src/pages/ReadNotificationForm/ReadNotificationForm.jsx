@@ -109,6 +109,7 @@ const ReadNotificationForm = () => {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
+            origin: 'http://localhost:5173',
           },
         }
       );
