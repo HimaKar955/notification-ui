@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import {createOrUpdateNotification} from '../../api/Notification/notificationApi'
+import { createOrUpdateNotification } from "../../api/Notification/notificationApi";
 
 const InsertUpdateForm = () => {
   const token = "bluebird";
@@ -17,8 +17,8 @@ const InsertUpdateForm = () => {
       destinationCode: "",
       requestedBy: "John Doe",
       messageVersion: "1",
-      suppressManualOrder: "false",  // default value "false"
-      suppressReflexTests: "false",  // default value "false"
+      suppressManualOrder: "false", // default value "false"
+      suppressReflexTests: "false", // default value "false"
       notificationAccountStatusCode: [],
       notificationContent: [],
     }
@@ -30,11 +30,53 @@ const InsertUpdateForm = () => {
   useEffect(() => {
     // List of performing sites (simulating fetching from a database)
     setPerformingSites([
-      "PHP", "QTE", "CHL", "SLI", "AMD", "ESW", "SJC", "FDX", "Z3E", "ZBD",
-      "WDL", "MJV", "STL", "NEL", "PBL", "QER", "ERE", "SKB", "TMP", "**",
-      "QSO", "DLO", "DAL", "MET", "SEA", "EXO", "AAR", "AGI", "ACF", "***",
-      "ACV", "DCF", "AIN", "ALU", "NGI", "AOK", "DPP", "SWF", "ATA", "ANT",
-      "DAZ", "DBA", "DPC", "DDR", "DSF", "DWI", "TP1",
+      "PHP",
+      "QTE",
+      "CHL",
+      "SLI",
+      "AMD",
+      "ESW",
+      "SJC",
+      "FDX",
+      "Z3E",
+      "ZBD",
+      "WDL",
+      "MJV",
+      "STL",
+      "NEL",
+      "PBL",
+      "QER",
+      "ERE",
+      "SKB",
+      "TMP",
+      "**",
+      "QSO",
+      "DLO",
+      "DAL",
+      "MET",
+      "SEA",
+      "EXO",
+      "AAR",
+      "AGI",
+      "ACF",
+      "***",
+      "ACV",
+      "DCF",
+      "AIN",
+      "ALU",
+      "NGI",
+      "AOK",
+      "DPP",
+      "SWF",
+      "ATA",
+      "ANT",
+      "DAZ",
+      "DBA",
+      "DPC",
+      "DDR",
+      "DSF",
+      "DWI",
+      "TP1",
     ]);
   }, []);
 
@@ -48,9 +90,9 @@ const InsertUpdateForm = () => {
   };
   // Handle multi-select changes
   const handleMultiSelectChange = (e, keyName) => {
-    const selectedOptions = Array.from(e.target.selectedOptions).map(
-      (opt) => ({ [keyName]: parseInt(opt.value) })
-    );
+    const selectedOptions = Array.from(e.target.selectedOptions).map((opt) => ({
+      [keyName]: parseInt(opt.value),
+    }));
 
     setFormData((prevState) => ({
       ...prevState,
@@ -58,37 +100,37 @@ const InsertUpdateForm = () => {
     }));
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const payloadData = { ...formData };
     if (isEditForm) {
       delete payloadData.clientAccountNumber;
     }
-  
+
     const notificationConfigPayload = {
       notificationAccount: [payloadData],
     };
-  
-  
+
     try {
-      const response = await createOrUpdateNotification(notificationConfigPayload, token);
+      const response = await createOrUpdateNotification(
+        notificationConfigPayload,
+        token
+      );
       setResponseData(response.data);
     } catch (error) {
       console.error("Error submitting form:", error);
       setResponseData({ error: "Failed to submit notification." });
     }
   };
-  
 
   return (
     <div>
       <h4>Insert/Update Notification</h4>
       <div className="card p-4 shadow-sm">
-        <form id="notificationForm" onSubmit={handleSubmit}>
+        <form id="notificationForm" className="row" onSubmit={handleSubmit}>
           {/* Client Account Number */}
-          <div className="mb-3">
+          <div className="mb-3 col-md-4 col-lg-4 col-xl-4">
             <label htmlFor="clientAccount" className="form-label">
               Client Account Number *
             </label>
@@ -104,7 +146,7 @@ const InsertUpdateForm = () => {
           </div>
 
           {/* Performing Site */}
-          <div className="mb-3">
+          <div className="mb-3 col-md-4 col-lg-4 col-xl-4">
             <label htmlFor="performingSite" className="form-label">
               Performing Site *
             </label>
@@ -126,7 +168,7 @@ const InsertUpdateForm = () => {
           </div>
 
           {/* Comment */}
-          <div className="mb-3">
+          <div className="mb-3 col-md-4 col-lg-4 col-xl-4">
             <label htmlFor="comment" className="form-label">
               Comment
             </label>
@@ -141,7 +183,7 @@ const InsertUpdateForm = () => {
           </div>
 
           {/* Destination Code */}
-          <div className="mb-3">
+          <div className="mb-3 col-md-4 col-lg-4 col-xl-4">
             <label htmlFor="destinationCode" className="form-label">
               Destination Code *
             </label>
@@ -162,7 +204,7 @@ const InsertUpdateForm = () => {
           </div>
 
           {/* Requested By */}
-          <div className="mb-3">
+          <div className="mb-3 col-md-4 col-lg-4 col-xl-4">
             <label htmlFor="requestedBy" className="form-label">
               Requested By
             </label>
@@ -177,7 +219,7 @@ const InsertUpdateForm = () => {
           </div>
 
           {/* Message Version */}
-          <div className="mb-3">
+          <div className="mb-3 col-md-4 col-lg-4 col-xl-4">
             <label htmlFor="messageVersion" className="form-label">
               Message Version
             </label>
@@ -193,74 +235,8 @@ const InsertUpdateForm = () => {
             </select>
           </div>
 
-          {/* Suppress Manual Order */}
-          <div className="mb-3">
-            <label className="form-label d-block">Suppress Manual Order</label>
-            <div className="form-check form-check-inline">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="suppressManualOrder"
-                id="suppressYes"
-                value="Y"
-                checked={formData.supressManualOrder === "Y"}
-                onChange={handleChange}
-              />
-              <label className="form-check-label" htmlFor="suppressYes">
-                Yes
-              </label>
-            </div>
-            <div className="form-check form-check-inline">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="suppressManualOrder"
-                id="suppressNo"
-                value="N"
-                checked={formData.supressManualOrder === "N"}
-                onChange={handleChange}
-              />
-              <label className="form-check-label" htmlFor="suppressNo">
-                No
-              </label>
-            </div>
-          </div>
-
-          {/* Suppress Reflex Tests */}
-          <div className="mb-3">
-            <label className="form-label d-block">Suppress Reflex Tests</label>
-            <div className="form-check form-check-inline">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="suppressReflexTests"
-                id="reflexYes"
-                value="Y"
-                checked={formData.supressReflexTests === "Y"}
-                onChange={handleChange}
-              />
-              <label className="form-check-label" htmlFor="reflexYes">
-                Yes
-              </label>
-            </div>
-            <div className="form-check form-check-inline">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="suppressReflexTests"
-                id="reflexNo"
-                value="N"
-                checked={formData.supressReflexTests === "N"}
-                onChange={handleChange}
-              />
-              <label className="form-check-label" htmlFor="reflexNo">
-                No
-              </label>
-            </div>
-          </div>
-
           {/* Notification Account Status Code (Multi Select) */}
-          <div className="mb-3">
+          <div className="mb-3 col-md-4 col-lg-4 col-xl-4">
             <label htmlFor="notificationStatusCode" className="form-label">
               Notification Account Status Code
             </label>
@@ -285,7 +261,7 @@ const InsertUpdateForm = () => {
           </div>
 
           {/* Notification Content (Multi Select) */}
-          <div className="mb-3">
+          <div className="mb-3 col-md-4 col-lg-4 col-xl-4">
             <label htmlFor="notificationContent" className="form-label">
               Notification Content
             </label>
@@ -309,8 +285,83 @@ const InsertUpdateForm = () => {
             </select>
           </div>
 
+          <div className="col-md-4 col-lg-4 col-xl-4">
+            {/* Suppress Manual Order */}
+            <div className="mb-3">
+              <label className="form-label d-block">
+                Suppress Manual Order
+              </label>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="suppressManualOrder"
+                  id="suppressYes"
+                  value="Y"
+                  checked={formData.supressManualOrder === "Y"}
+                  onChange={handleChange}
+                />
+                <label className="form-check-label" htmlFor="suppressYes">
+                  Yes
+                </label>
+              </div>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="suppressManualOrder"
+                  id="suppressNo"
+                  value="N"
+                  checked={formData.supressManualOrder === "N"}
+                  onChange={handleChange}
+                />
+                <label className="form-check-label" htmlFor="suppressNo">
+                  No
+                </label>
+              </div>
+            </div>
+
+            {/* Suppress Reflex Tests */}
+            <div className="mb-3">
+              <label className="form-label d-block">
+                Suppress Reflex Tests
+              </label>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="suppressReflexTests"
+                  id="reflexYes"
+                  value="Y"
+                  checked={formData.supressReflexTests === "Y"}
+                  onChange={handleChange}
+                />
+                <label className="form-check-label" htmlFor="reflexYes">
+                  Yes
+                </label>
+              </div>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="suppressReflexTests"
+                  id="reflexNo"
+                  value="N"
+                  checked={formData.supressReflexTests === "N"}
+                  onChange={handleChange}
+                />
+                <label className="form-check-label" htmlFor="reflexNo">
+                  No
+                </label>
+              </div>
+            </div>
+          </div>
+
           {/* Submit Button */}
-          <button type="submit" className="btn btn-success">
+          <button
+            type="submit"
+            className="btn btn-success col-md-2 col-lg-2 col-xl-2"
+          >
             {isEditForm ? "Update" : "Submit"}
           </button>
         </form>

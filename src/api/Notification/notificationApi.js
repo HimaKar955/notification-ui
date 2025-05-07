@@ -26,7 +26,9 @@ export const getNotificationConfig = async ({
 
 // DELETE: Delete a notification config
 export const deleteNotificationConfig = async (
-  clientNumber, businessUnit, destinationCode ,
+  clientNumber,
+  businessUnit,
+  destinationCode,
   token = "bluebird" // optionally receive token
 ) => {
   const url = `${BASE_URL}/notifConfig?clientNumber=${clientNumber}&businessUnit=${businessUnit}&destinationCode=${destinationCode}`;
@@ -39,7 +41,10 @@ export const deleteNotificationConfig = async (
 };
 
 // POST: Create or update a notification config
-export const createOrUpdateNotification = async (notificationConfigPayload, token) => {
+export const createOrUpdateNotification = async (
+  notificationConfigPayload,
+  token
+) => {
   return axios.post(`${BASE_URL}/notifConfig`, notificationConfigPayload, {
     headers: {
       "Content-Type": "application/json",

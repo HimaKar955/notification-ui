@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
 
 const DeleteForm = () => {
   const [formData, setFormData] = useState({
-    clientAccountDelete: '',
-    performingSiteDelete: '',
+    clientAccountDelete: "",
+    performingSiteDelete: "",
   });
 
   const [errors, setErrors] = useState([]);
@@ -20,8 +20,9 @@ const DeleteForm = () => {
     const { clientAccountDelete, performingSiteDelete } = formData;
     const newErrors = [];
 
-    if (!clientAccountDelete) newErrors.push('Client Account Number is required.');
-    if (!performingSiteDelete) newErrors.push('Performing Site is required.');
+    if (!clientAccountDelete)
+      newErrors.push("Client Account Number is required.");
+    if (!performingSiteDelete) newErrors.push("Performing Site is required.");
 
     if (newErrors.length) {
       setErrors(newErrors);
@@ -29,13 +30,15 @@ const DeleteForm = () => {
     }
 
     axios
-      .post('/api/delete-notification', formData)
+      .post("/api/delete-notification", formData)
       .then(() => {
-        alert('Notification deleted successfully!');
-        setFormData({ clientAccountDelete: '', performingSiteDelete: '' });
+        alert("Notification deleted successfully!");
+        setFormData({ clientAccountDelete: "", performingSiteDelete: "" });
         setErrors([]);
       })
-      .catch(() => alert('Something went wrong while deleting the notification.'));
+      .catch(() =>
+        alert("Something went wrong while deleting the notification.")
+      );
   };
 
   return (

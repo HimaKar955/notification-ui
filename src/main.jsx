@@ -4,9 +4,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import Router from "./routes/Router"; // We'll move useRoutes here
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

@@ -36,11 +36,19 @@ const NotificationTable = ({ responseData }) => {
 
   const handleDelete = (row) => {
     const { clientAccountNumber, performingSite, destinationCode } = row;
-    deleteNotificationConfig(clientAccountNumber, performingSite, destinationCode)
+    deleteNotificationConfig(
+      clientAccountNumber,
+      performingSite,
+      destinationCode
+    )
       .then(() => {
         toast.success("Row deleted successfully");
         // Optional: Call a refresh function from parent instead of fetchData
-        setRows(prev => prev.filter(r => r.notificationAccountUid !== row.notificationAccountUid));
+        setRows((prev) =>
+          prev.filter(
+            (r) => r.notificationAccountUid !== row.notificationAccountUid
+          )
+        );
       })
       .catch(() => {
         toast.error("Unable to delete row!");
@@ -86,6 +94,5 @@ const NotificationTable = ({ responseData }) => {
     </TableContainer>
   );
 };
-
 
 export default NotificationTable;

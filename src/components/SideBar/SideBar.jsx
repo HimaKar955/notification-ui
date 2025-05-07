@@ -18,11 +18,11 @@ const Sidebar = () => {
             Insert/Update
           </NavLink>
         </li>
-        <li className="nav-item">
+        {/* <li className="nav-item">
           <NavLink className="nav-link" to="/delete">
             Delete
           </NavLink>
-        </li>
+        </li> */}
         <li className="nav-item">
           <NavLink className="nav-link" to="/read-notification">
             Read
